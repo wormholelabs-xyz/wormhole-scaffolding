@@ -11,6 +11,7 @@ repository = "https://github.com/wormhole-foundation/wormhole-scaffolding"
 [features]
 default = ["mainnet"]
 mainnet = []
+bridge-address-from-env = []
 solana-devnet = []
 tilt-devnet = []
 token-bridge = []
