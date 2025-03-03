@@ -2,7 +2,7 @@ use anchor_lang::{prelude::*, solana_program};
 
 use crate::wormhole::{message::PostedVaaMeta, program::ID};
 
-#[derive(Debug, Default, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[derive(Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub struct BridgeData {
     /// The current guardian set index, used to decide which signature sets to accept.
     pub guardian_set_index: u32,
@@ -26,7 +26,7 @@ impl BridgeData {
     }
 }
 
-#[derive(Debug, Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[derive(Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub struct BridgeConfig {
     /// Period for how long a guardian set is valid after it has been replaced by a new one.  This
     /// guarantees that VAAs issued by that set can still be submitted for a certain period.  In
@@ -51,7 +51,7 @@ impl Owner for BridgeData {
     }
 }
 
-#[derive(Debug, Default, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[derive(Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub struct FeeCollector {}
 
 impl FeeCollector {
@@ -72,7 +72,7 @@ impl Owner for FeeCollector {
     }
 }
 
-#[derive(Debug, Default, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[derive(Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub struct SequenceTracker {
     pub sequence: u64,
 }
@@ -103,7 +103,7 @@ impl Owner for SequenceTracker {
     }
 }
 
-#[derive(Debug, Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[derive(Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub struct SignatureSetData {
     /// Signatures of validators
     pub signatures: Vec<bool>,
@@ -129,7 +129,7 @@ impl Owner for SignatureSetData {
     }
 }
 
-#[derive(Debug, Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[derive(Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub struct PostedVaaData {
     pub meta: PostedVaaMeta,
     pub payload: Vec<u8>,
@@ -189,7 +189,7 @@ impl Owner for PostedVaaData {
     }
 }
 
-#[derive(Debug, Default, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[derive(Default, AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub struct PostedVaa<D: AnchorDeserialize + AnchorSerialize> {
     pub meta: PostedVaaMeta,
     pub payload: (u32, D),
@@ -270,35 +270,3 @@ impl<D: AnchorDeserialize + AnchorSerialize> Owner for PostedVaa<D> {
         ID
     }
 }
-
-#[cfg(feature = "idl-build")]
-impl Discriminator for BridgeData {
-    const DISCRIMINATOR: &'static [u8] = &[];
-}
-
-#[cfg(feature = "idl-build")]
-impl Discriminator for FeeCollector {
-    const DISCRIMINATOR: &'static [u8] = &[];
-}
-
-#[cfg(feature = "idl-build")]
-impl Discriminator for SequenceTracker {
-    const DISCRIMINATOR: &'static [u8] = &[];
-}
-
-#[cfg(feature = "idl-build")]
-impl<T: AnchorSerialize + AnchorDeserialize> Discriminator for PostedVaa<T> {
-    const DISCRIMINATOR: &'static [u8] = &[];
-}
-
-#[cfg(feature = "idl-build")]
-impl IdlBuild for BridgeData {}
-
-#[cfg(feature = "idl-build")]
-impl IdlBuild for FeeCollector {}
-
-#[cfg(feature = "idl-build")]
-impl IdlBuild for SequenceTracker {}
-
-#[cfg(feature = "idl-build")]
-impl<T: AnchorSerialize + AnchorDeserialize> IdlBuild for PostedVaa<T> {}
